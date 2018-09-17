@@ -55,6 +55,14 @@ public class PayStationImpl implements PayStation {
         reset();
     }
     
+    
+    @Override public int empty(){
+        int temp = insertedSoFar;
+        insertedSoFar = 0;
+        
+        return temp;
+    }
+    
     private void reset() {
         timeBought = insertedSoFar = 0;
     }
