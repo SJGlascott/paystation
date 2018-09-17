@@ -83,6 +83,14 @@ public class PayStationImpl implements PayStation {
         return copy;
     }
     
+    
+    @Override public int empty(){
+        int temp = insertedSoFar;
+        insertedSoFar = 0;
+        
+        return temp;
+    }
+    
     private void reset() {
         timeBought = insertedSoFar = 0;
         change.put(5, 0);

@@ -58,4 +58,11 @@ public interface PayStation {
     * The Map will be cleared after a cancel or buy. 
     */
     public Map<Integer, Integer> cancel();
+
+    /**
+     * returns the total amount of money collected by the paystation since
+     * the last call and empties it, setting the total to zero.
+     */
+    public int empty();
+
 }
