@@ -22,6 +22,7 @@ import java.util.Map;
  * implied. You may study, use, modify, and distribute it for non-commercial
  * purposes. For any commercial use, see http://www.baerbak.com/
  */
+
 public class PayStationImpl implements PayStation {
     
     private int insertedSoFar;
