@@ -1,5 +1,8 @@
 package paystation.domain;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Implementation of the pay station.
  *
@@ -19,23 +22,43 @@ package paystation.domain;
  * implied. You may study, use, modify, and distribute it for non-commercial
  * purposes. For any commercial use, see http://www.baerbak.com/
  */
+
 public class PayStationImpl implements PayStation {
     
     private int insertedSoFar;
     private int timeBought;
-
+    private Map<Integer, Integer> change = new HashMap<>();
+    
+    public PayStationImpl()
+    {
+        change.put(25,0);
+        change.put(10,0);
+        change.put(5,0);
+    }
+    
     @Override
     public void addPayment(int coinValue)
             throws IllegalCoinException {
         switch (coinValue) {
-            case 5: break;
-            case 10: break;
-            case 25: break;
+            case 5: 
+                change.put(5 ,change.get(5)+1 );
+                insertedSoFar += coinValue;
+                timeBought = insertedSoFar / 5 * 2;
+                break;
+            case 10: 
+                change.put(10 ,change.get(10)+1 );
+                insertedSoFar += coinValue;
+                timeBought = insertedSoFar / 5 * 2;
+                break;
+            case 25: 
+                change.put(25 ,change.get(25)+1 );
+                insertedSoFar += coinValue;
+                timeBought = insertedSoFar / 5 * 2;
+                break;
             default:
                 throw new IllegalCoinException("Invalid coin: " + coinValue);
         }
-        insertedSoFar += coinValue;
-        timeBought = insertedSoFar / 5 * 2;
+        
     }
 
     @Override
@@ -51,11 +74,28 @@ public class PayStationImpl implements PayStation {
     }
 
     @Override
-    public void cancel() {
+    public Map<Integer, Integer> cancel() {
+        HashMap<Integer, Integer> copy = new HashMap<>();
+        copy.put(5,0);
+        copy.put(10,0);
+        copy.put(25,0);
+        copy.putAll(change);
         reset();
+        return copy;
+    }
+    
+    
+    @Override public int empty(){
+        int temp = insertedSoFar;
+        insertedSoFar = 0;
+        
+        return temp;
     }
     
     private void reset() {
         timeBought = insertedSoFar = 0;
+        change.put(5, 0);
+        change.put(10, 0);
+        change.put(25, 0);
     }
 }

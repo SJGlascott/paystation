@@ -11,6 +11,8 @@
  */
 package paystation.domain;
 
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
@@ -130,12 +132,68 @@ public class PayStationImplTest {
     @Test
     public void shouldClearAfterCancel()
             throws IllegalCoinException {
+        Map<Integer, Integer> zero = new HashMap<>();
+        zero.put(25, 0);
+        zero.put(10, 1);
+        zero.put(5, 0);
         ps.addPayment(10);
-        ps.cancel();
+        Map ret = ps.cancel();
         assertEquals("Cancel should clear display",
                 0, ps.readDisplay());
+        assertEquals("maps should be zero", zero, ret);
+        
         ps.addPayment(25);
         assertEquals("Insert after cancel should work",
                 10, ps.readDisplay());
     }
+    
+    /**
+     * Test different hash map returns
+     */
+    @Test
+    public void TestDifferentMapValues() throws IllegalCoinException
+    {
+        ps.addPayment(25);
+        ps.addPayment(5);
+        Map <Integer, Integer> expected = new HashMap<>();
+        expected.put(25, 1);
+        expected.put(5, 1);
+        expected.put(10,0);
+        
+        Map ret = ps.cancel();
+        assertEquals("One quarter and one nickel", expected, ret);
+        
+        expected.put(5,0);
+        ps.addPayment(25);
+        ret = ps.cancel();
+        assertEquals("One quarter and one nickel", expected, ret);
+    }
+  
+    /**
+     * Verify empty returns the total amount entered
+     */
+    @Test
+    public void shouldReturnAmountEntered() throws IllegalCoinException{
+        ps.addPayment(10);
+        
+        int amountEntered = ps.empty();
+
+        
+        assertEquals(10,amountEntered);
+    }
+    
+    /**
+     * Verify empty returns the total amount entered
+     */
+    @Test
+    public void shouldEnsureTotalEmpty() throws IllegalCoinException{
+        ps.addPayment(10);
+        
+        // set the total to 0
+        ps.empty();
+
+        // make sure that the stored value was 0 (because we just emptied it)
+        assertEquals(0,ps.empty());
+    }
+
 }
