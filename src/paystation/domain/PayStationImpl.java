@@ -1,5 +1,7 @@
 package paystation.domain;
 
+import PaymentType.PaymentCalc;
+import PaymentType.PaymentCalcFactory;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,6 +30,7 @@ public class PayStationImpl implements PayStation {
     private int insertedSoFar;
     private int timeBought;
     private Map<Integer, Integer> change = new HashMap<>();
+    private int payType;
     
     public PayStationImpl()
     {
@@ -36,6 +39,10 @@ public class PayStationImpl implements PayStation {
         change.put(5,0);
     }
     
+    public void setPaytype(int payType)
+    {
+        this.payType = payType;
+    }
     @Override
     public void addPayment(int coinValue)
             throws IllegalCoinException {
@@ -43,17 +50,17 @@ public class PayStationImpl implements PayStation {
             case 5: 
                 change.put(5 ,change.get(5)+1 );
                 insertedSoFar += coinValue;
-                timeBought = insertedSoFar / 5 * 2;
+                
                 break;
             case 10: 
                 change.put(10 ,change.get(10)+1 );
                 insertedSoFar += coinValue;
-                timeBought = insertedSoFar / 5 * 2;
+                
                 break;
             case 25: 
                 change.put(25 ,change.get(25)+1 );
                 insertedSoFar += coinValue;
-                timeBought = insertedSoFar / 5 * 2;
+                
                 break;
             default:
                 throw new IllegalCoinException("Invalid coin: " + coinValue);
@@ -97,5 +104,11 @@ public class PayStationImpl implements PayStation {
         change.put(5, 0);
         change.put(10, 0);
         change.put(25, 0);
+    }
+    
+    public void calcTime(){
+        timeBought = (new PaymentCalcFactory())
+                .findPaymentCalc(payType)
+                .calculate(insertedSoFar);
     }
 }

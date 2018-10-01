@@ -10,7 +10,7 @@ package PaymentType;
  * @author scott
  */
 public class PaymentCalcFactory {
-    public PaymentCalc PaymentCalcFactory(int type)
+    public PaymentCalc findPaymentCalc(int type)
     {
         switch (type) {
             case 0:
