@@ -28,7 +28,7 @@ import java.util.Map;
 public class PayStationImpl implements PayStation {
     
     private int insertedSoFar;
-    private int timeBought;
+    private double timeBought;
     private Map<Integer, Integer> change = new HashMap<>();
     private int payType;
     
@@ -69,12 +69,13 @@ public class PayStationImpl implements PayStation {
     }
 
     @Override
-    public int readDisplay() {
-        return timeBought;
+    public double readDisplay() {
+        return calcTime();
     }
 
     @Override
     public Receipt buy() {
+        timeBought=calcTime();
         Receipt r = new ReceiptImpl(timeBought);
         reset();
         return r;
@@ -106,9 +107,15 @@ public class PayStationImpl implements PayStation {
         change.put(25, 0);
     }
     
-    public void calcTime(){
-        timeBought = (new PaymentCalcFactory())
+    public double calcTime(){
+        double time = (new PaymentCalcFactory())
                 .findPaymentCalc(payType)
                 .calculate(insertedSoFar);
+        return time;
+    }
+    
+    
+    public int getInsertedSoFar(){
+        return insertedSoFar;
     }
 }

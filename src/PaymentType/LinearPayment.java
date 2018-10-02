@@ -11,7 +11,7 @@ package PaymentType;
  */
 public class LinearPayment implements PaymentCalc{
     
-    public int calculate(int insertedSoFar){        
+    public double calculate(int insertedSoFar){        
         return insertedSoFar / 5 * 2;
     }
     

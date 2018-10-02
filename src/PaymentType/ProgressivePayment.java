@@ -11,15 +11,15 @@ package PaymentType;
  */
 public class ProgressivePayment implements PaymentCalc{
     
-    public int calculate(int insertedSoFar){
+    public double calculate(int insertedSoFar){
         double timeBought = 0;
         if(insertedSoFar<=150)
             timeBought= insertedSoFar / 5 * 2;
         else if(insertedSoFar<=350)
-            timeBought= 60 + insertedSoFar / 5 * 1.5;
+            timeBought= 60 + (insertedSoFar-150) / 5 * 1.5;
         else
-            timeBought=120 + insertedSoFar / 5 * 1;
+            timeBought=120 + (insertedSoFar-350) / 5 * 1;
         
-        return (int)timeBought;
+        return timeBought;
     }
 }

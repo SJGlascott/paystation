@@ -10,5 +10,5 @@ package PaymentType;
  * @author scott
  */
 public interface PaymentCalc {
-    public int calculate(int insertedSoFar);
+    public double calculate(int insertedSoFar);
 }
