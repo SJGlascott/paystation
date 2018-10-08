@@ -11,7 +11,7 @@ package PaymentType;
  */
 public class AltPayment implements PaymentCalc{
     
-    public int calculate(int insertedSoFar){
+    public double calculate(int insertedSoFar){
         Boolean weekday = true;
         
         if(weekday)

@@ -38,7 +38,7 @@ public interface PayStation {
      *
      * @return the number to display on the pay station display
      */
-    public int readDisplay();
+    public double readDisplay();
 
     /**
      * Buy parking time. Terminate the ongoing transaction and return a parking
