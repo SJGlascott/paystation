@@ -36,13 +36,14 @@ Change Rate Strategy
  */
 public class MainSim {
 
+    static Scanner kb = new Scanner(System.in);
+    static PayStationImpl ps = new PayStationImpl();
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) throws IllegalCoinException {
-        Scanner kb = new Scanner(System.in);
-        PayStationImpl ps = new PayStationImpl();
-        Map<Integer, Integer> change = new HashMap<>();
+
         int input = 0;
         int input2 = 1;
         while (input != 6) {
@@ -54,46 +55,80 @@ public class MainSim {
                     + "5: Change Rate Strategy\n"
                     + "6: Exit\n");
             input = kb.nextInt();
+            System.out.println(" ");
             switch (input) {
                 case 1:
-                    while (true) {
-                        System.out.println("Deposit Coins 1 at a time, 0 when finished");
-                        input2 = kb.nextInt();
-                        if (input2 == 5 || input2 == 10 || input2 == 25) {
-                            ps.addPayment(input2);
-                        } else if (input2 == 0) {
-                            break;
-                        } else {
-                            System.out.println("Invalid Coin Value");
-                        }
-                        System.out.println("Inserted so far: " + ps.getInsertedSoFar() + "\n");
-                    }
+                    depositCoins();
                     break;
                 case 2:
-                    System.out.println("Inserted so far: " + ps.getInsertedSoFar());
-                    System.out.println("Which is worth: " + ps.readDisplay() + "\n");
+                    display();
                     break;
                 case 3:
-                    System.out.println("Thank you for your purchase!");
-                    Receipt receipt = ps.buy();
-                    System.out.println("Time Bought: " + receipt.value() + " minutes" + "\n");
+                    buyTicket();
                     break;
                 case 4:
-                    System.out.println("Remember to grab your change.");
-                    int returned = ps.getInsertedSoFar();
-                    change = ps.cancel();
-                    Set set = change.entrySet();
-                    Iterator i = set.iterator();
-                    System.out.println("Change: " + returned);
-                    Map.Entry entry = null;
-                    while (i.hasNext()) {
-                        entry = (Map.Entry) i.next();
-                        System.out.println(entry.getKey() + ": " + entry.getValue());
-                    }
-                    System.out.println("");
+                    cancel();
                     break;
                 case 5:
-                    while (true) {
+                    changeRateStrategy();
+                    break;
+
+                case 6:
+                    System.exit(0);
+                default:
+                    System.out.println("Invalid input" + "\n");
+            }
+        }
+
+    }
+
+    public static void depositCoins() throws IllegalCoinException {
+        int input2 = 1;
+        while (true) {
+
+            System.out.println("Deposit Coins 1 at a time, 0 when finished");
+            input2 = kb.nextInt();
+            if (input2 == 5 || input2 == 10 || input2 == 25) {
+                ps.addPayment(input2);
+            } else if (input2 == 0) {
+                break;
+            } else {
+                System.out.println("Invalid Coin Value");
+            }
+            System.out.println("\n" + "Inserted so far: " + ps.getInsertedSoFar());
+        }
+    }
+
+    public static void display() {
+        System.out.println("Inserted so far: " + ps.getInsertedSoFar());
+        System.out.println("Which is worth: " + ps.readDisplay() + "\n");
+    }
+
+    public static void buyTicket() {
+        System.out.println("Thank you for your purchase!");
+        Receipt receipt = ps.buy();
+        System.out.println("Time Bought: " + receipt.value() + " minutes" + "\n");
+    }
+
+    public static void cancel() {
+        Map<Integer, Integer> change = new HashMap<>();
+        System.out.println("Remember to grab your change.");
+        int returned = ps.getInsertedSoFar();
+        change = ps.cancel();
+        Set set = change.entrySet();
+        Iterator i = set.iterator();
+        System.out.println("Change: " + returned);
+        Map.Entry entry = null;
+        while (i.hasNext()) {
+            entry = (Map.Entry) i.next();
+            System.out.println(entry.getKey() + ": " + entry.getValue());
+        }
+        System.out.println("");
+    }
+    
+    public static void changeRateStrategy() {
+        int input;
+    while (true) {
                         System.out.println("0: Linear\n"
                                 + "1: Progressive\n"
                                 + "2: Alternate\n");
@@ -101,18 +136,16 @@ public class MainSim {
                         if (input < 0 || input > 2) {
                             System.out.println("Invalid Input.");
                         } else {
+                            if (input == 0)
+                                System.out.println("Changed to Linear\n");
+                            else if (input == 1)
+                                System.out.println("Changed to Progressive\n");
+                            else
+                                System.out.println("Changed to Alternate\n");
                             ps.setPaytype(input);
                             break;
                         }
                     }
-                    break;
-
-                case 6:
-                    System.exit(0);
-                default:
-                    System.out.println("Invalid input"+"\n");
-            }
-        }
     }
 
 }

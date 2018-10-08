@@ -5,6 +5,11 @@
  */
 package PaymentType;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.text.SimpleDateFormat;
+
+
 /**
  *
  * @author scott
@@ -12,12 +17,16 @@ package PaymentType;
 public class AltPayment implements PaymentCalc{
     
     public double calculate(int insertedSoFar){
-        Boolean weekday = true;
+        Date now = new Date();
         
-        if(weekday)
-            return (new ProgressivePayment()).calculate(insertedSoFar);
-        else
+        SimpleDateFormat simpleDateformat = new SimpleDateFormat("E");
+        System.out.println(simpleDateformat.format(now));
+        
+        if (simpleDateformat.format(now) == "Sat" || simpleDateformat.format(now) == "Sun") 
             return (new LinearPayment()).calculate(insertedSoFar);
+        else
+            return (new ProgressivePayment()).calculate(insertedSoFar);
+            
     }
     
 }
